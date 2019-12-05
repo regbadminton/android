@@ -113,8 +113,8 @@ public class MainActivity extends AppCompatActivity {
             imageViewLogo.setImageResource(R.drawable.icon);
             progressBar.setVisibility(View.GONE);
             try {
-                String testCourse="[{\"date\":\"2019-12-05\",\"time\":\"6:30pm - 8:00pm\",\"classId\":\"8bf9cd44-3181-4fbf-b650-0b44dda33ca7\"}]";JSONArray jsonArray=new JSONArray(testCourse);
-//                JSONArray jsonArray=new JSONArray(response);
+//                String testCourse="[{\"date\":\"2019-12-05\",\"time\":\"6:30pm - 8:00pm\",\"classId\":\"8bf9cd44-3181-4fbf-b650-0b44dda33ca7\"}]";JSONArray jsonArray=new JSONArray(testCourse);
+                JSONArray jsonArray=new JSONArray(response);
                 Course[] courses=new Course[jsonArray.length()];
                 for(int i=0;i<jsonArray.length();++i)courses[i]=new Course(jsonArray.getJSONObject(i));
                 switch (jsonArray.length()){
