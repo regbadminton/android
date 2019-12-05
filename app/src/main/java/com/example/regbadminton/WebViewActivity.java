@@ -20,8 +20,7 @@ public class WebViewActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_web_view);
 
-        ImageView closeButton=findViewById(R.id.closeButton);
-        setToolbar(closeButton);
+        setToolbar();
         webView=findViewById(R.id.webView);
         webView.setWebViewClient(new MyBrowser());
         webView.getSettings().setLoadsImagesAutomatically(true);
@@ -36,10 +35,11 @@ public class WebViewActivity extends AppCompatActivity {
         else super.onBackPressed();
     }
 
-    void setToolbar(ImageView close){
+    void setToolbar(){
         Toolbar toolbar=findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        close.setOnClickListener(new View.OnClickListener() {
+        ImageView closeButton=findViewById(R.id.closeButton);
+        closeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(WebViewActivity.this,MainActivity.class));
