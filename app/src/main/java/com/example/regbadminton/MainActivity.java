@@ -1,8 +1,10 @@
 package com.example.regbadminton;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.browser.customtabs.CustomTabsIntent;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -69,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
         return new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this,WebViewActivity.class).putExtra("url","https://accounts.surrey.ca/auth.aspx"));
+                new CustomTabsIntent.Builder().setToolbarColor(getResources().getColor(R.color.colorPrimaryDark)).build().launchUrl(MainActivity.this,Uri.parse("https://accounts.surrey.ca/auth.aspx"));
             }
         };
     }
@@ -144,7 +146,7 @@ public class MainActivity extends AppCompatActivity {
             return new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    startActivity(new Intent(MainActivity.this,WebViewActivity.class).putExtra("url",url));
+                    new CustomTabsIntent.Builder().setToolbarColor(getResources().getColor(R.color.colorPrimaryDark)).build().launchUrl(MainActivity.this,Uri.parse(url));
                 }
             };
         }
