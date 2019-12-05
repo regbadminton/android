@@ -2,9 +2,11 @@ package com.example.regbadminton;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.browser.customtabs.CustomTabsIntent;
 
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.DragEvent;
 import android.view.View;
@@ -20,38 +22,7 @@ public class WebViewActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_web_view);
 
-//        setToolbar();
-        webView=findViewById(R.id.webView);
-        webView.setWebViewClient(new MyBrowser());
-        webView.getSettings().setLoadsImagesAutomatically(true);
-        webView.getSettings().setJavaScriptEnabled(true);
-        webView.setScrollBarStyle(View.SCROLLBARS_INSIDE_OVERLAY);
-        webView.loadUrl(getIntent().getStringExtra("url"));
-    }
-
-    @Override
-    public void onBackPressed() {
-        if(webView.canGoBack())webView.goBack();
-        else super.onBackPressed();
-    }
-
-//    void setToolbar(){
-//        Toolbar toolbar=findViewById(R.id.toolbar);
-//        setSupportActionBar(toolbar);
-//        ImageView closeButton=findViewById(R.id.closeButton);
-//        closeButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                startActivity(new Intent(WebViewActivity.this,MainActivity.class));
-//            }
-//        });
-//    }
-
-    private class MyBrowser extends WebViewClient {
-        @Override
-        public boolean shouldOverrideUrlLoading(WebView view, String url) {
-            view.loadUrl(url);
-            return true;
-        }
+        CustomTabsIntent intent=new CustomTabsIntent.Builder().setToolbarColor(getResources().getColor(R.color.colorPrimaryDark)).build();
+        intent.launchUrl(this, Uri.parse(getIntent().getStringExtra("url")));
     }
 }
