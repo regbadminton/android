@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Badminton Registration</string>
+    <string name="strNoSessions">No sessions found.</string>
+    <string name="strSes1">Session 1</string>
+    <string name="strSes2">Session 2</string>
+    <string name="strLogin">Login to MySurrey</string>
+</resources>
