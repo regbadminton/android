@@ -25,7 +25,6 @@ import java.util.Calendar;
 import java.util.Date;
 
 public class MainActivity extends AppCompatActivity {
-    Button buttonLogin;
     Button buttonSession1;
     Button buttonSession2;
     Button buttonSingleSession;
@@ -36,9 +35,8 @@ public class MainActivity extends AppCompatActivity {
     ImageView imageViewLogo;
     ProgressBar progressBar;
 
-    Calendar tomorrow;
-
-    final String DATE_FORMAT="yyyyMMdd";
+    private Calendar tomorrow;
+    final private String DATE_FORMAT="yyyyMMdd";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,45 +44,16 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         initializeViews();
 
-        tomorrow= Calendar.getInstance();
+        tomorrow=Calendar.getInstance();
         tomorrow.add(Calendar.DATE,1);
-        new GetCoursesTask(new SimpleDateFormat(DATE_FORMAT).format(tomorrow.getTime())).execute();
-
-//        buttonLogin.setOnClickListener(setButtonLoginListener());
+        new GetCoursesTask().execute(new SimpleDateFormat(DATE_FORMAT).format(tomorrow.getTime()));
     }
 
-    void initializeViews(){
-        progressBar=findViewById(R.id.progressBar);
-        buttonLogin=findViewById(R.id.buttonLogin);
-        buttonSession1=findViewById(R.id.buttonSession1);
-        buttonSession2=findViewById(R.id.buttonSession2);
-        buttonSingleSession=findViewById(R.id.buttonSingleSession);
-        textViewDate=findViewById(R.id.textViewDate);
-        textViewNone=findViewById(R.id.textViewNone);
-        textViewUpdated=findViewById(R.id.textViewUpdated);
-        textViewTitle=findViewById(R.id.textViewTitle);
-        imageViewLogo=findViewById(R.id.imageViewLogo);
-    }
-
-    View.OnClickListener setButtonLoginListener() {
-        return new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                new CustomTabsIntent.Builder().setToolbarColor(getResources().getColor(R.color.colorPrimaryDark)).build().launchUrl(MainActivity.this,Uri.parse("https://accounts.surrey.ca/auth.aspx"));
-            }
-        };
-    }
-
-    class GetCoursesTask extends AsyncTask<Void, Void, String> {
-        private String date;
-        GetCoursesTask(String date){
-            this.date=date;
-        }
-
+    class GetCoursesTask extends AsyncTask<String, Void, String> {
         @Override
-        protected String doInBackground(Void... voids) {
+        protected String doInBackground(String... date) {
             try {
-                URL url = new URL("https://regbadminton.com/api/?d="+date);
+                URL url = new URL("https://regbadminton.com/api/?d="+date[0]);
                 HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
                 try {
                     BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
@@ -113,7 +82,6 @@ public class MainActivity extends AppCompatActivity {
             imageViewLogo.setImageResource(R.drawable.icon);
             progressBar.setVisibility(View.GONE);
             try {
-//                String testCourse="[{\"date\":\"2019-12-05\",\"time\":\"6:30pm - 8:00pm\",\"classId\":\"8bf9cd44-3181-4fbf-b650-0b44dda33ca7\"}]";JSONArray jsonArray=new JSONArray(testCourse);
                 JSONArray jsonArray=new JSONArray(response);
                 Course[] courses=new Course[jsonArray.length()];
                 for(int i=0;i<jsonArray.length();++i)courses[i]=new Course(jsonArray.getJSONObject(i));
@@ -141,7 +109,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         private View.OnClickListener setSessionButtonListener(Course course) {
-            final String url="https://cityofsurrey.perfectmind.com/23615/Store/BookMe4LandingPages/Class?widgetId=15f6af07-39c5-473e-b053-96653f77a406&embed=False&redirectedFromEmbededMode=False&classId="+course.getClassId()+"&occurrenceDate="+course.getDate(DATE_FORMAT);
+            final String url="https://cityofsurrey.perfectmind.com/23615/Menu/BookMe4EventParticipants?eventId="+course.getClassId()+"&occurrenceDate="+course.getDate(DATE_FORMAT)+"&widgetId=15f6af07-39c5-473e-b053-96653f77a406&locationId=0dd01783-dad1-4a11-bfa8-b6b1049bbf53&waitListMode=False";
             return new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -149,5 +117,16 @@ public class MainActivity extends AppCompatActivity {
                 }
             };
         }
+    }
+    void initializeViews(){
+        progressBar=findViewById(R.id.progressBar);
+        buttonSession1=findViewById(R.id.buttonSession1);
+        buttonSession2=findViewById(R.id.buttonSession2);
+        buttonSingleSession=findViewById(R.id.buttonSingleSession);
+        textViewDate=findViewById(R.id.textViewDate);
+        textViewNone=findViewById(R.id.textViewNone);
+        textViewUpdated=findViewById(R.id.textViewUpdated);
+        textViewTitle=findViewById(R.id.textViewTitle);
+        imageViewLogo=findViewById(R.id.imageViewLogo);
     }
 }
