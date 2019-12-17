@@ -9,13 +9,32 @@ import java.text.SimpleDateFormat;
 public class Course {
     private String date;
     private String time;
-    private String classId;
+    private String classID;
+    private String location;
+
+    public String getLocation() {
+        return location;
+    }
+
+    public String getLocationID() {
+        return locationID;
+    }
+
+    public String getComment() {
+        return comment;
+    }
+
+    private String locationID;
+    private String comment;
 
     public Course(JSONObject jsonCourse){
         try {
             date=jsonCourse.getString("date");
             time=jsonCourse.getString("time");
-            classId= jsonCourse.getString("classId");
+            classID= jsonCourse.getString("classID");
+            location= jsonCourse.getString("location");
+            locationID= jsonCourse.getString("locationID");
+            comment= jsonCourse.getString("comment");
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -39,7 +58,7 @@ public class Course {
         return time;
     }
 
-    public String getClassId() {
-        return classId;
+    public String getClassID() {
+        return classID;
     }
 }

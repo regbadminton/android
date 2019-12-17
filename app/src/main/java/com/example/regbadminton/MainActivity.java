@@ -109,7 +109,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         private View.OnClickListener setSessionButtonListener(Course course) {
-            final String url="https://cityofsurrey.perfectmind.com/23615/Menu/BookMe4EventParticipants?eventId="+course.getClassId()+"&occurrenceDate="+course.getDate(DATE_FORMAT)+"&widgetId=15f6af07-39c5-473e-b053-96653f77a406&locationId=0dd01783-dad1-4a11-bfa8-b6b1049bbf53&waitListMode=False";
+            final String url="https://cityofsurrey.perfectmind.com/23615/Menu/BookMe4EventParticipants?eventId="+course.getClassID()+"&occurrenceDate="+course.getDate(DATE_FORMAT)+"&widgetId=15f6af07-39c5-473e-b053-96653f77a406&locationId="+course.getLocationID()+"&waitListMode=False";
             return new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
