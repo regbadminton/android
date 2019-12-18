@@ -3,6 +3,7 @@ package com.example.regbadminton;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.browser.customtabs.CustomTabsIntent;
 
+import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -32,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
     TextView textViewNone;
     TextView textViewUpdated;
     TextView textViewTitle;
+    TextView textViewSearch;
     ImageView imageViewLogo;
     ProgressBar progressBar;
 
@@ -47,6 +49,10 @@ public class MainActivity extends AppCompatActivity {
         tomorrow=Calendar.getInstance();
         tomorrow.add(Calendar.DATE,1);
         new GetCoursesTask().execute(new SimpleDateFormat(DATE_FORMAT).format(tomorrow.getTime()));
+        textViewSearch.setOnClickListener(new View.OnClickListener(){@Override public void onClick(View v){
+            String url="https://cityofsurrey.perfectmind.com/23615/Menu/BookMe4BookingPages/Classes?calendarId=ec6defcd-4317-4bf3-a72e-a9c6b4e5c897&widgetId=15f6af07-39c5-473e-b053-96653f77a406&embed=False";
+            new CustomTabsIntent.Builder().setShowTitle(true).setToolbarColor(getResources().getColor(R.color.colorPrimaryDark)).build().launchUrl(MainActivity.this,Uri.parse(url));
+        }});
     }
 
     class GetCoursesTask extends AsyncTask<String, Void, String> {
@@ -77,9 +83,14 @@ public class MainActivity extends AppCompatActivity {
 
         protected  void onPostExecute(String response){
             textViewDate.setText("For "+new SimpleDateFormat("EEEE MMMM d yyyy").format(tomorrow.getTime()));
-            textViewUpdated.setText("Last updated:\n"+new SimpleDateFormat("EEE MMM d yyyy h:mm:ss a").format(new Date()));
             textViewTitle.setText(R.string.app_name);
             imageViewLogo.setImageResource(R.drawable.icon);
+            SimpleDateFormat updatedTextFormat=new SimpleDateFormat("EEE MMM d yyyy h:mm:ss a");
+            Date now=new Date();
+            if(getResources().getConfiguration().orientation==Configuration.ORIENTATION_LANDSCAPE)
+                 textViewUpdated.setText("Last updated: "+updatedTextFormat.format(now));
+            else textViewUpdated.setText("Last updated:\n"+updatedTextFormat.format(now));
+            textViewSearch.setVisibility(View.VISIBLE);
             progressBar.setVisibility(View.GONE);
             try {
                 JSONArray jsonArray=new JSONArray(response);
@@ -113,7 +124,7 @@ public class MainActivity extends AppCompatActivity {
             return new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    new CustomTabsIntent.Builder().setToolbarColor(getResources().getColor(R.color.colorPrimaryDark)).build().launchUrl(MainActivity.this,Uri.parse(url));
+                    new CustomTabsIntent.Builder().setShowTitle(true).setToolbarColor(getResources().getColor(R.color.colorPrimaryDark)).build().launchUrl(MainActivity.this,Uri.parse(url));
                 }
             };
         }
@@ -128,5 +139,6 @@ public class MainActivity extends AppCompatActivity {
         textViewUpdated=findViewById(R.id.textViewUpdated);
         textViewTitle=findViewById(R.id.textViewTitle);
         imageViewLogo=findViewById(R.id.imageViewLogo);
+        textViewSearch=findViewById(R.id.textViewSearch);
     }
 }

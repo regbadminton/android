@@ -4,4 +4,5 @@
     <string name="strSes1">Session 1</string>
     <string name="strSes2">Session 2</string>
     <string name="strLogin">Login to MySurrey</string>
+    <string name="strDropIn"><u>Search Drop-In Sports</u></string>
 </resources>
