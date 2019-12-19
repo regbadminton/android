@@ -23,7 +23,6 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 
 public class MainActivity extends AppCompatActivity {
     Button buttonSession1;
@@ -65,9 +64,7 @@ public class MainActivity extends AppCompatActivity {
                     BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
                     StringBuilder stringBuilder = new StringBuilder();
                     String line;
-                    while ((line = bufferedReader.readLine()) != null) {
-                        stringBuilder.append(line).append("\n");
-                    }
+                    while ((line = bufferedReader.readLine()) != null)stringBuilder.append(line).append("\n");
                     bufferedReader.close();
                     return stringBuilder.toString();
                 }
@@ -82,26 +79,21 @@ public class MainActivity extends AppCompatActivity {
         }
 
         protected  void onPostExecute(String response){
+            Character whiteSpace='\n';
+            if(getResources().getConfiguration().orientation==Configuration.ORIENTATION_LANDSCAPE)whiteSpace=' ';
+            textViewUpdated.setText("Last updated:"+whiteSpace+new SimpleDateFormat("EEE MMM d yyyy h:mm:ss a").format(Calendar.getInstance().getTime()));
+
             textViewDate.setText("For "+new SimpleDateFormat("EEEE MMMM d yyyy").format(tomorrow.getTime()));
-            textViewTitle.setText(R.string.app_name);
-            imageViewLogo.setImageResource(R.drawable.icon);
-            SimpleDateFormat updatedTextFormat=new SimpleDateFormat("EEE MMM d yyyy h:mm:ss a");
-            Date now=new Date();
-            if(getResources().getConfiguration().orientation==Configuration.ORIENTATION_LANDSCAPE)
-                 textViewUpdated.setText("Last updated: "+updatedTextFormat.format(now));
-            else textViewUpdated.setText("Last updated:\n"+updatedTextFormat.format(now));
-            textViewSearch.setVisibility(View.VISIBLE);
+            for(View v:new View[]{imageViewLogo,textViewTitle,textViewSearch})v.setVisibility(View.VISIBLE);
             progressBar.setVisibility(View.GONE);
             try {
                 JSONArray jsonArray=new JSONArray(response);
-                Course[] courses=new Course[jsonArray.length()];
+                Course[]courses=new Course[jsonArray.length()];
                 for(int i=0;i<jsonArray.length();++i)courses[i]=new Course(jsonArray.getJSONObject(i));
                 switch (jsonArray.length()){
                     case 2:
-                        buttonSession1.setOnClickListener(setSessionButtonListener(courses[0]));
-                        buttonSession2.setOnClickListener(setSessionButtonListener(courses[1]));
-                        buttonSession1.setVisibility(View.VISIBLE);
-                        buttonSession2.setVisibility(View.VISIBLE);
+                        for(Button b:new Button[]{buttonSession1,buttonSession2}){b.setVisibility(View.VISIBLE);
+                            b.setOnClickListener(setSessionButtonListener(courses[b.getText().charAt(8)-'0'-1]));}
                     break;
 
                     case 1:
@@ -142,3 +134,4 @@ public class MainActivity extends AppCompatActivity {
         textViewSearch=findViewById(R.id.textViewSearch);
     }
 }
+
